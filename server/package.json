@@ -24,6 +24,7 @@
     "@fastify/multipart": "^8.1.0",
     "@fastify/static": "^7.0.1",
     "@prisma/client": "^5.10.2",
+    "@sinclair/typebox": "^0.32.34",
     "bcrypt": "^5.1.1",
     "chalk": "^5.3.0",
     "date-fns": "^3.3.1",

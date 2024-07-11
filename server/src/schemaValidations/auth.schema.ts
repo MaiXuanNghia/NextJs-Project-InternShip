@@ -53,3 +53,15 @@ export type SlideSessionBodyType = z.TypeOf<typeof SlideSessionBody>
 export const SlideSessionRes = RegisterRes
 
 export type SlideSessionResType = z.TypeOf<typeof SlideSessionRes>
+
+export const UpdatePasswordSchema = z.object({
+  userId: z.number(),
+  currentPassword: z.string().min(6, 'Current password must be at least 6 characters'),
+  newPassword: z.string().min(6, 'New password must be at least 6 characters')
+})
+
+export type UpdatePasswordSchemaType = z.infer<typeof UpdatePasswordSchema>
+
+export const MessageResSchema = z.object({
+  message: z.string()
+})

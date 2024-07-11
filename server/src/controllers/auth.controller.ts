@@ -98,3 +98,36 @@ export const loginController = async (body: LoginBodyType) => {
     session
   }
 }
+
+// import { PrismaClient } from '@prisma/client'
+
+// const prisma = new PrismaClient()
+
+export const updatePasswordController = async (userId: number, currentPassword: string, newPassword: string) => {
+  const account = await prisma.account.findUnique({
+    where: {
+      id: userId
+    }
+  })
+
+  if (!account) {
+    throw new EntityError([{ field: 'user', message: 'User does not exist' }])
+  }
+
+  const isPasswordMatch = await comparePassword(currentPassword, account.password)
+  if (!isPasswordMatch) {
+    throw new EntityError([{ field: 'currentPassword', message: 'Current password is incorrect' }])
+  }
+
+  const hashedNewPassword = await hashPassword(newPassword)
+  await prisma.account.update({
+    where: {
+      id: userId
+    },
+    data: {
+      password: hashedNewPassword
+    }
+  })
+
+  return 'Password updated successfully'
+}

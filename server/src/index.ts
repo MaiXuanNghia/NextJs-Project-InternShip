@@ -15,6 +15,7 @@ import mediaRoutes from '@/routes/media.route'
 import staticRoutes from '@/routes/static.route'
 import productRoutes from '@/routes/product.route'
 import testRoutes from '@/routes/test.route'
+import { authRoutes2 } from './routes/updatePass.route'
 
 const fastify = Fastify({
   logger: true
@@ -58,6 +59,9 @@ const start = async () => {
     })
     fastify.register(testRoutes, {
       prefix: '/test'
+    })
+    fastify.register(authRoutes2, {
+      prefix: '/updates'
     })
     await fastify.listen({
       port: envConfig.PORT
