@@ -99,14 +99,11 @@ export const loginController = async (body: LoginBodyType) => {
   }
 }
 
-// import { PrismaClient } from '@prisma/client'
-
-// const prisma = new PrismaClient()
-
-export const updatePasswordController = async (userId: number, currentPassword: string, newPassword: string) => {
+export const updatePasswordController = async (email: string, newPassword: string) => {
+  // currentPassword: string,
   const account = await prisma.account.findUnique({
     where: {
-      id: userId
+      email: email
     }
   })
 
@@ -114,15 +111,15 @@ export const updatePasswordController = async (userId: number, currentPassword: 
     throw new EntityError([{ field: 'user', message: 'User does not exist' }])
   }
 
-  const isPasswordMatch = await comparePassword(currentPassword, account.password)
-  if (!isPasswordMatch) {
-    throw new EntityError([{ field: 'currentPassword', message: 'Current password is incorrect' }])
-  }
+  // const isPasswordMatch = await comparePassword(account.password) // currentPassword,
+  // if (!isPasswordMatch) {
+  //   throw new EntityError([{ field: 'currentPassword', message: 'Current password is incorrect' }])
+  // }
 
   const hashedNewPassword = await hashPassword(newPassword)
   await prisma.account.update({
     where: {
-      id: userId
+      email: email
     },
     data: {
       password: hashedNewPassword
@@ -130,4 +127,18 @@ export const updatePasswordController = async (userId: number, currentPassword: 
   })
 
   return 'Password updated successfully'
+}
+
+export const CheckEmailController = async (email: string) => {
+  const account = await prisma.account.findUnique({
+    where: {
+      email: email
+    }
+  })
+
+  if (!account) {
+    throw new EntityError([{ field: 'email', message: 'Email does not exist' }])
+  }
+
+  return 'Email is available'
 }
